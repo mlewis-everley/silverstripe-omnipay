@@ -15,6 +15,7 @@ use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Exception\OmnipayException;
+use Omnipay\Common\Message\ResponseInterface;
 use Symfony\Component\EventDispatcher\Tests\Service;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -156,7 +157,7 @@ abstract class PaymentService extends \SS_Object
         $notification = null;
         try {
             $notification = $gateway->acceptNotification();
-        } catch (\Omnipay\Common\Exception\OmnipayException $e) {
+        } catch (OmnipayException $e) {
             $this->createMessage('NotificationError', $e);
             return $this->generateServiceResponse(
                 ServiceResponse::SERVICE_NOTIFICATION | ServiceResponse::SERVICE_ERROR
@@ -250,7 +251,7 @@ abstract class PaymentService extends \SS_Object
      */
     protected function getEndpointUrl($action)
     {
-        return PaymentGatewayController::getEndpointUrl($action, $this->payment->Identifier, $this->payment->Gateway);
+        return PaymentGatewayController::getEndpointUrl($action, $this->payment->Identifier);
     }
 
     /**
@@ -259,7 +260,7 @@ abstract class PaymentService extends \SS_Object
      * @param bool $isNotification whether or not this response is a response to a notification
      * @return ServiceResponse
      */
-    protected function wrapOmnipayResponse(AbstractResponse $omnipayResponse, $isNotification = false)
+    protected function wrapOmnipayResponse(ResponseInterface $omnipayResponse, $isNotification = false)
     {
         if ($isNotification) {
             $flags = ServiceResponse::SERVICE_NOTIFICATION;

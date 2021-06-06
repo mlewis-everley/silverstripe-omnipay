@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Class GatewayMessage
+ * @package SilverStripe\Omnipay\Model\Message
+ * @property string $Gateway
+ * @property string $Reference
+ * @property string $Code
+ */
 class GatewayMessage extends PaymentMessage
 {
 

@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Omnipay\Admin;
 
+use Omnipay\Omnipay;
 use SilverStripe\Omnipay\GatewayInfo;
 
 /**
@@ -70,11 +71,11 @@ class PaymentDevelopmentAdmin extends \Controller
      */
     private function PaymentTypes()
     {
-        $factory = new \Omnipay\Common\GatewayFactory;
+        $factory = Omnipay::getFactory();
         // since the omnipay gateway factory only returns gateways from the composer.json extra data,
         // we should merge it with user-defined gateways from Payment.allowed_gateways
         $gateways = array_unique(array_merge(
-            $factory->find(),
+            $factory->all(),
             array_keys(GatewayInfo::getSupportedGateways(false))
         ));
 
